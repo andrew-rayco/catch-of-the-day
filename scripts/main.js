@@ -2,11 +2,12 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
+var Router  = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var Navigation = ReactRouter.Navigation;
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
+var h = require('./helpers');
 /*
   App
 */
@@ -18,7 +19,7 @@ var App = React.createClass({
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
-        </div>
+        </div>  
         <Order/>
         <Inventory/>
       </div>
@@ -40,7 +41,7 @@ var Header = React.createClass({
             <span className="the">the</span>
           </span>
           Day</h1>
-        <h3 className="tagline"><span>{this.props.tagline}</span></h3>
+        <h3 className="tagline"><span>{this.props.tagline}</span></h3> 
       </header>
     )
   }
@@ -71,7 +72,7 @@ var Inventory = React.createClass({
 })
 
 
-/*
+/* 
   StorePicker
   This will let us make <StorePicker/>
 */
@@ -82,7 +83,7 @@ var StorePicker = React.createClass({
     return (
       <form className="store-selector">
         <h2>Please Enter A Store</h2>
-        <input type="text" ref="storeId" required />
+        <input type="text" ref="storeId" defaultValue={h.getFunName()} required />
         <input type="Submit" />
       </form>
     )
@@ -95,10 +96,11 @@ var StorePicker = React.createClass({
 */
 
 var NotFound = React.createClass({
-  render: function() {
-    return <h1>Not Found</h1>
+  render : function() {
+    return <h1>Not Found!</h1>
   }
-})
+});
+
 
 /*
   Routes
@@ -106,9 +108,9 @@ var NotFound = React.createClass({
 
 var routes = (
   <Router history={createBrowserHistory()}>
-    <Route path='/' component={StorePicker} />
-    <Route path='/store/:storeId' component={App} />
-    <Route path='*' component={NotFound} />
+    <Route path="/" component={StorePicker}/>
+    <Route path="/store/:storeId" component={App}/>
+    <Route path="*" component={NotFound}/>
   </Router>
 )
 

@@ -13,19 +13,65 @@ var h = require('./helpers');
 */
 
 var App = React.createClass({
-
+  getInitialState: function() {
+    return {
+      fishes: {},
+      order: {}
+    }
+  },
+  addFish: function(fish) {
+    var timeStamp = (new Date()).getTime();
+    this.state.fishes['fish=' + timeStamp] = fish;
+    this.setState({ fishes: this.state.fishes });
+  },
   render : function() {
     return (
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
-        </div>  
+        </div>
         <Order/>
-        <Inventory/>
+        <Inventory addFish={this.addFish}/>
       </div>
     )
   }
 });
+
+/*
+  Add Fish form
+  <AddFishForm />
+*/
+
+var AddFishForm = React.createClass({
+  createFish: function(e) {
+    e.preventDefault()
+    var fish = {
+      name: this.refs.name.value,
+      price:  this.refs.price.value,
+      status: this.refs.status.value,
+      desc: this.refs.desc.value,
+      image: this.refs.image.value
+    }
+    this.props.addFish(fish)
+    this.refs.fishForm.reset();
+  },
+  render: function() {
+    return (
+      <form className="fish-edit" ref="fishForm" onSubmit={this.createFish}>
+        <input type="text" ref="name" placeholder="Fish Name" />
+        <input type="text" ref="price" placeholder="Fish Price" />
+        <select ref="status">
+          <option value="available">Fresh!</option>
+          <option value="unavailable">Sold Out!</option>
+        </select>
+        <textarea type="text" ref="desc" placeholder="Desc"></textarea>
+        <input type="text" ref="image" placeholder="URL to Image" />
+        <button type="submit">+ Add Item </button>
+      </form>
+    )
+  }
+})
+
 
 /*
   Header
@@ -41,7 +87,7 @@ var Header = React.createClass({
             <span className="the">the</span>
           </span>
           Day</h1>
-        <h3 className="tagline"><span>{this.props.tagline}</span></h3> 
+        <h3 className="tagline"><span>{this.props.tagline}</span></h3>
       </header>
     )
   }
@@ -66,13 +112,16 @@ var Order = React.createClass({
 var Inventory = React.createClass({
   render : function() {
     return (
-      <p>Inventory</p>
+      <div>
+        <h2>Inventory</h2>
+        <AddFishForm addFish={this.props.addFish} />
+      </div>
     )
   }
 })
 
 
-/* 
+/*
   StorePicker
   This will let us make <StorePicker/>
 */

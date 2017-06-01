@@ -8,57 +8,69 @@ var History = ReactRouter.History;
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var h = require('./helpers');
+
 /*
   App
 */
 
 var App = React.createClass({
-  getInitialState: function() {
+  getInitialState : function() {
     return {
-      fishes: {},
-      order: {}
+      fishes : {},
+      order : {}
     }
+  }, 
+  addFish : function(fish) {
+    var timestamp = (new Date()).getTime();
+    // update the state object
+    this.state.fishes['fish-' + timestamp] = fish;
+    // set the state
+    this.setState({ fishes : this.state.fishes });
   },
-  addFish: function(fish) {
-    var timeStamp = (new Date()).getTime();
-    this.state.fishes['fish=' + timeStamp] = fish;
-    this.setState({ fishes: this.state.fishes });
+  loadSamples : function() {
+    this.setState({
+      fishes : require('./sample-fishes')
+    });
   },
   render : function() {
     return (
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
-        </div>
+        </div>  
         <Order/>
-        <Inventory addFish={this.addFish}/>
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
       </div>
     )
   }
 });
 
 /*
-  Add Fish form
+  Add Fish Form
   <AddFishForm />
 */
 
 var AddFishForm = React.createClass({
-  createFish: function(e) {
-    e.preventDefault()
+  createFish : function(event) {
+    // 1. Stop the form from submitting
+    event.preventDefault();
+    // 2. Take the data from the form and create an object
     var fish = {
-      name: this.refs.name.value,
-      price:  this.refs.price.value,
-      status: this.refs.status.value,
-      desc: this.refs.desc.value,
-      image: this.refs.image.value
+      name : this.refs.name.value,
+      price : this.refs.price.value,
+      status : this.refs.status.value,
+      desc : this.refs.desc.value,
+      image : this.refs.image.value
     }
-    this.props.addFish(fish)
+
+    // 3. Add the fish to the App State
+    this.props.addFish(fish);
     this.refs.fishForm.reset();
   },
-  render: function() {
+  render : function() {
     return (
       <form className="fish-edit" ref="fishForm" onSubmit={this.createFish}>
-        <input type="text" ref="name" placeholder="Fish Name" />
+        <input type="text" ref="name" placeholder="Fish Name"/>
         <input type="text" ref="price" placeholder="Fish Price" />
         <select ref="status">
           <option value="available">Fresh!</option>
@@ -70,8 +82,7 @@ var AddFishForm = React.createClass({
       </form>
     )
   }
-})
-
+});
 
 /*
   Header
@@ -87,7 +98,7 @@ var Header = React.createClass({
             <span className="the">the</span>
           </span>
           Day</h1>
-        <h3 className="tagline"><span>{this.props.tagline}</span></h3>
+        <h3 className="tagline"><span>{this.props.tagline}</span></h3> 
       </header>
     )
   }
@@ -114,14 +125,16 @@ var Inventory = React.createClass({
     return (
       <div>
         <h2>Inventory</h2>
-        <AddFishForm addFish={this.props.addFish} />
+
+        <AddFishForm {...this.props} />
+        <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
       </div>
     )
   }
 })
 
 
-/*
+/* 
   StorePicker
   This will let us make <StorePicker/>
 */

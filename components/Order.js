@@ -6,11 +6,10 @@
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import h from '../helpers';
-import autobind from 'autobind-decorator'
+import autobind from 'autobind-decorator';
 
 @autobind
 class Order extends React.Component {
-
   renderOrder(key) {
     var fish = this.props.fishes[key];
     var count = this.props.order[key];
@@ -35,7 +34,7 @@ class Order extends React.Component {
 
   render() {
     var orderIds = Object.keys(this.props.order);
-
+    
     var total = orderIds.reduce((prevTotal, key)=> {
       var fish = this.props.fishes[key];
       var count = this.props.order[key];
@@ -51,7 +50,7 @@ class Order extends React.Component {
     return (
       <div className="order-wrap">
         <h2 className="order-title">Your Order</h2>
-
+        
         <CSSTransitionGroup
               className="order"
               component="ul"
@@ -69,7 +68,8 @@ class Order extends React.Component {
       </div>
     )
   }
-}
+
+};
 
 Order.propTypes = {
   fishes : React.PropTypes.object.isRequired,

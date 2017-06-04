@@ -5,17 +5,17 @@
 
 import React from 'react';
 import h from '../helpers';
-import autobind from 'autobind-decorator'
+import autobind from 'autobind-decorator';
 
 @autobind
 class Fish extends React.Component {
-
+  
   onButtonClick() {
     console.log("Going to add the fish: ", this.props.index);
     var key = this.props.index;
     this.props.addToOrder(key);
   }
-
+  
   render() {
     var details = this.props.details;
     var isAvailable = (details.status === 'available' ? true : false);
@@ -32,7 +32,7 @@ class Fish extends React.Component {
       </li>
     )
   }
-}
+};
 
 
 export default Fish;

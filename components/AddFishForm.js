@@ -4,7 +4,7 @@
 */
 
 import React from 'react';
-import autobind from 'autobind-decorator'
+import autobind from 'autobind-decorator';
 
 @autobind
 class AddFishForm extends React.Component {
@@ -40,6 +40,6 @@ class AddFishForm extends React.Component {
       </form>
     )
   }
-}
+};
 
 export default AddFishForm;

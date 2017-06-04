@@ -1,6 +1,5 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var CSSTransitionGroup = require('react-addons-css-transition-group');
 
 var ReactRouter = require('react-router');
 var Router  = ReactRouter.Router;
@@ -12,7 +11,7 @@ var h = require('./helpers');
 
 // Firebase
 var Rebase = require('re-base');
-var base = Rebase.createClass('https://catch-of-the-day.firebaseio.com/');
+var base = Rebase.createClass('https://catch-of-the-day-d4ad2.firebaseio.com/');
 
 var Catalyst = require('react-catalyst');
 
@@ -88,7 +87,7 @@ var App = React.createClass({
           <ul className="list-of-fishes">
             {Object.keys(this.state.fishes).map(this.renderFish)}
           </ul>
-        </div>  
+        </div>
         <Order fishes={this.state.fishes} order={this.state.order} removeFromOrder={this.removeFromOrder} />
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples} fishes={this.state.fishes} linkState={this.linkState} removeFish={this.removeFish} />
       </div>
@@ -105,7 +104,7 @@ var Fish = React.createClass({
     console.log("Going to add the fish: ", this.props.index);
     var key = this.props.index;
     this.props.addToOrder(key);
-  }, 
+  },
   render : function() {
     var details = this.props.details;
     var isAvailable = (details.status === 'available' ? true : false);
@@ -178,7 +177,7 @@ var Header = React.createClass({
             <span className="the">the</span>
           </span>
           Day</h1>
-        <h3 className="tagline"><span>{this.props.tagline}</span></h3> 
+        <h3 className="tagline"><span>{this.props.tagline}</span></h3>
       </header>
     )
   }
@@ -200,19 +199,15 @@ var Order = React.createClass({
 
     return (
       <li key={key}>
-        <span>
-          <CSSTransitionGroup component="span" transitionName="count" transitionLeaveTimeout={250} transitionEnterTimeout={250} className="count">
-            <span key={count}>{count}</span>
-          </CSSTransitionGroup>
-
-          lbs {fish.name} {removeButton}
-        </span>
+        {count}lbs
+        {fish.name}
         <span className="price">{h.formatPrice(count * fish.price)}</span>
+        {removeButton}
       </li>)
   },
   render : function() {
     var orderIds = Object.keys(this.props.order);
-    
+
     var total = orderIds.reduce((prevTotal, key)=> {
       var fish = this.props.fishes[key];
       var count = this.props.order[key];
@@ -228,21 +223,13 @@ var Order = React.createClass({
     return (
       <div className="order-wrap">
         <h2 className="order-title">Your Order</h2>
-        
-        <CSSTransitionGroup
-              className="order"
-              component="ul"
-              transitionName="order"
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={500}
-            >
+        <ul className="order">
           {orderIds.map(this.renderOrder)}
           <li className="total">
             <strong>Total:</strong>
             {h.formatPrice(total)}
           </li>
-        </CSSTransitionGroup>
-
+        </ul>
       </div>
     )
   }
@@ -267,7 +254,7 @@ var Inventory = React.createClass({
         <textarea valueLink={linkState('fishes.' + key + '.desc')}></textarea>
         <input type="text" valueLink={linkState('fishes.'+ key +'.image')}/>
         <button onClick={this.props.removeFish.bind(null, key)}>Remove Fish</button>
-        
+
       </div>
     )
   },
@@ -275,7 +262,7 @@ var Inventory = React.createClass({
     return (
       <div>
         <h2>Inventory</h2>
-        
+
         {Object.keys(this.props.fishes).map(this.renderInventory)}
 
         <AddFishForm {...this.props} />
@@ -286,7 +273,7 @@ var Inventory = React.createClass({
 })
 
 
-/* 
+/*
   StorePicker
   This will let us make <StorePicker/>
 */
